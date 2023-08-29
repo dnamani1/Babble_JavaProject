@@ -94,4 +94,11 @@ public class TileBag {
 		Tile patsy = tiles.remove(index);
 		return patsy;
 	}
+	
+	public void addTile(Tile tile) {
+	    if (tile == null) {
+	        throw new IllegalArgumentException("Tile cannot be null");
+	    }
+	    this.tiles.add(tile);
+	}
 }
