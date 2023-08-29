@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE VBox [ ]>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+	minWidth="-Infinity" prefHeight="270.0" prefWidth="400.0" spacing="10.0"
+	xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label alignment="TOP_LEFT" text="Tiles" />
+		<ListView fx:id="tilesLisView" prefHeight="100.0" prefWidth="369.0" />
+		<Label text="Your Word" />
+		<ListView fx:id="wordListView" prefHeight="35.0" prefWidth="369.0" />
+		<HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="369.0"
+			spacing="10.0">
+			<children>
+				<Button lineSpacing="10.0" mnemonicParsing="false" text="Reset"
+					textAlignment="JUSTIFY" />
+				<Button mnemonicParsing="false" text="Play Word" />
+			</children>
+		</HBox>
+		<HBox alignment="TOP_RIGHT" prefHeight="46.0" prefWidth="369.0"
+			spacing="10.0">
+			<children>
+				<Label text="Score:" />
+				<TextField fx:id="scoreListView" prefHeight="33.0"
+					prefWidth="149.0" promptText="0" />
+			</children>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+	</padding>
+</VBox>
