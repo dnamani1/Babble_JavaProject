@@ -50,4 +50,5 @@ public class PlayedWord extends TileGroup {
 	public void clear() {
 		super.tiles().clear();
 	}
+
 }

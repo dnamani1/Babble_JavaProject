@@ -22,7 +22,7 @@
 		<ListView fx:id="tilesListView" prefHeight="40.0"
 			prefWidth="360.0" />
 		<Label text="Your Word" />
-		<ListView fx:id="wordTextField" prefHeight="40.0"
+		<TextField fx:id="wordTextField" prefHeight="40.0"
 			prefWidth="360.0" />
 		<HBox alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="369.0"
 			spacing="10.0">

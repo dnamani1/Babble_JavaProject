@@ -64,4 +64,10 @@ public class Tile {
 			return 10;
 		}
 	}
+	
+	@Override
+	public String toString() {
+	    return String.valueOf(this.getLetter());
+	}
+
 }
