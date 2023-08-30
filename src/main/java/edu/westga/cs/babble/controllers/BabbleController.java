@@ -1,8 +1,13 @@
 package edu.westga.cs.babble.controllers;
 
 import edu.westga.cs.babble.model.TileBag;
+import edu.westga.cs.babble.model.TileRack;
+import edu.westga.cs.babble.model.TileRackFullException;
 import edu.westga.cs.babble.model.PlayedWord;
 import edu.westga.cs.babble.model.Tile;
+
+import java.util.stream.Collectors;
+
 import edu.westga.cs.babble.model.EmptyTileBagException;
 
 import javafx.fxml.FXML;
@@ -17,8 +22,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class BabbleController {
     
     @FXML private ListView<Tile> tilesListView;
-    @FXML private TextField wordTextField;
+    @FXML private ListView<Tile> wordListView;
     @FXML private TextField scoreTextField;
+    private TileRack tileRack;
 
     private PlayedWord currentWord;
     private TileBag tileBag;
@@ -27,6 +33,7 @@ public class BabbleController {
     public BabbleController() {
         this.currentWord = new PlayedWord();
         this.tileBag = new TileBag();
+        this.tileRack = new TileRack();
         this.currentScore = new SimpleIntegerProperty();
     }
 
@@ -36,7 +43,7 @@ public class BabbleController {
         this.scoreTextField.textProperty().bind(this.currentScore.asString());
 
         // Customize the display of Tile objects in the ListView.
-        this.tilesListView.setCellFactory(param -> new ListCell<Tile>() {
+        this.wordListView.setCellFactory(param -> new ListCell<Tile>() {
             @Override
             protected void updateItem(Tile item, boolean empty) {
                 super.updateItem(item, empty);
@@ -57,10 +64,11 @@ public class BabbleController {
         Tile selectedTile = this.tilesListView.getSelectionModel().getSelectedItem();
         if (selectedTile != null) {
             // Append the letter of the selected tile to wordTextField.
-            this.wordTextField.appendText(String.valueOf(selectedTile.getLetter()));
+        	this.wordListView.getItems().add(selectedTile);
 
             // Remove the selected tile from the tilesListView.
             this.tilesListView.getItems().remove(selectedTile);
+            this.tileRack.tiles().remove(selectedTile);
             
             // Add the tile to the currentWord.
             this.currentWord.append(selectedTile);
@@ -69,7 +77,9 @@ public class BabbleController {
 
     @FXML
     private void playWord() {
-        String wordText = this.wordTextField.getText();
+    	String wordText = this.wordListView.getItems().stream()
+                .map(tile -> String.valueOf(tile.getLetter()))
+                .collect(Collectors.joining());
 
         if (!this.currentWord.matches(wordText)) {
             // Show an alert indicating the word is invalid.
@@ -84,7 +94,8 @@ public class BabbleController {
 
         // Clear the current word and refresh the tiles.
         this.currentWord.clear();
-        this.wordTextField.clear();
+        this.wordListView.getItems().clear();
+        this.tileRack.tiles().clear();
         this.refreshTiles();
     }
 
@@ -92,18 +103,19 @@ public class BabbleController {
     private void resetWord() {
         // Clear the current word and the wordTextField.
         this.currentWord.clear();
-        this.wordTextField.clear();
+        this.wordListView.getItems().clear();
     }
 
     private void refreshTiles() {
         this.tilesListView.getItems().clear();
-        for (int i = 0; i < 7; i++) {  // Assuming 7 tiles to be drawn each time.
+        int numberOfTilesNeeded = this.tileRack.getNumberOfTilesNeeded();
+        for (int i = 0; i < numberOfTilesNeeded; i++) {
             try {
                 Tile tile = this.tileBag.drawTile();
+                this.tileRack.append(tile); // Add to TileRack, it'll handle max size
                 this.tilesListView.getItems().add(tile);
-            } catch (EmptyTileBagException ex) {
-                // Handle the situation when the TileBag is empty.
-                // For now, we'll break out of the loop if no tiles are left.
+            } catch (EmptyTileBagException | TileRackFullException ex) {
+                // Handle exceptions
                 break;
             }
         }
